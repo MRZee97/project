@@ -1,0 +1,126 @@
+package com.example.myapplication;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) { //вводим наше выражение
+        Scanner in = new Scanner(System.in);
+        String input = in.nextLine();
+        System.out.println(calc(input));
+    }
+
+    public static int inrim(String q) { // создаем функцию для перевода римских цифр в арабские
+        if (q.equals("I")) return 1;
+        if (q.equals("II")) return 2;
+        if (q.equals("III")) return 3;
+        if (q.equals("IV")) return 4;
+        if (q.equals("V")) return 5;
+        if (q.equals("VI")) return 6;
+        if (q.equals("VII")) return 7;
+        if (q.equals("VIII")) return 8;
+        if (q.equals("IX")) return 9;
+        if (q.equals("X")) return 10;
+        return 0;
+    }
+
+    public static String rim(int q) { // создаем функцию для перевода арабских цифр в римские
+        if (q == 1) return "I";
+        if (q == 2) return "II";
+        if (q == 3) return "III";
+        if (q == 4) return "IV";
+        if (q == 5) return "V";
+        if (q == 6) return "VI";
+        if (q == 7) return "VII";
+        if (q == 8) return "VIII";
+        if (q == 9) return "IX";
+        if (q == 10) return "X";
+        if (q == 11) return "XI";
+        if (q == 12) return "XII";
+        if (q == 13) return "XIII";
+        if (q == 14) return "XIV";
+        if (q == 15) return "XV";
+        if (q == 16) return "XVI";
+        if (q == 17) return "XVII";
+        if (q == 18) return "XVIII";
+        if (q == 19) return "XIX";
+        if (q == 20) return "XX";
+        return "";
+    }
+
+    public static String calc(String input) {
+        // переделываем выражение в список и удаляем пробелы
+        String[] list = input.replace(" ", "").split("");
+        String v1 = ""; // первое число
+        String z = ""; // знак между ними
+        String v2 = ""; // второе число
+        // делаем проверку на длину списка для того чтобы узнать где находятся числа и присваевам
+        if (list.length == 3) {
+            // оба числа от 1 до 9
+            v1 = list[0];
+            z = list[1];
+            v2 = list[2];
+        }
+        if (list.length == 4) {
+            // узнаем где находится знак и от этого оттолакиваемся
+            if (list[1].equals("+") || list[1].equals("-") || list[1].equals("*") || list[1].equals("/")) {
+                // значит первое число от 1 до 9
+                v1 = list[0];
+                z = list[1];
+                v2 = list[2] + list[3];
+            }
+            if (list[2].equals("+") || list[2].equals("-") || list[2].equals("*") || list[2].equals("/")) {
+                // значит первое число 10
+                v1 = list[0] + list[1];
+                z = list[2];
+                v2 = list[3];
+            }
+        }
+        if (list.length == 5) {
+            // оба числа от 10
+            v1 = list[0] + list[1];
+            z = list[2];
+            v2 = list[3] + list[4];
+        }
+        String[] arab = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        // создаем ArrayList т.к с ним легче работать
+        ArrayList<String> str = new ArrayList<String>();
+        for (int i = 0; i < 10; i++) {
+            str.add(arab[i]); // добавляем в ArrayList элементы из массива выше
+        }
+        // проверяем явлются ли числа римскими или арабскими
+        if (str.contains(v1) & str.contains(v2)) { // если являеются римскими
+            if (z.equals("+")) {
+                return rim(inrim(v1) + inrim(v2));
+            }
+            if (z.equals("-")) {
+                if (inrim(v1) - inrim(v2) < 0) {
+                    return "Число меньше 0! Ошибка";
+                }
+                return rim(inrim(v1) - inrim(v2));
+            }
+            if (z.equals("*")) {
+                return rim(inrim(v1) * inrim(v2));
+            }
+            if (z.equals("/")) {
+                return rim(inrim(v1) / inrim(v2));
+            }
+        }
+        if (!str.contains(v1) & !str.contains(v2)) { // если не являются римскими т.е арабские
+            if (z.equals("+")) {
+                return Integer.toString(Integer.parseInt(v1) + Integer.parseInt(v2));
+            }
+            if (z.equals("-")) {
+                return Integer.toString(Integer.parseInt(v1) - Integer.parseInt(v2));
+            }
+            if (z.equals("*")) {
+                return Integer.toString(Integer.parseInt(v1) * Integer.parseInt(v2));
+            }
+            if (z.equals("/")) {
+                return Integer.toString(Integer.parseInt(v1) / Integer.parseInt(v2));
+            }
+        }
+
+        return "";
+    }
+}
